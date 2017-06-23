@@ -26,4 +26,4 @@ api.get('/posts/:id', getPostById);
 api.post('/posts', savePost);
 api.get('/posts/category/:id', getCategoryById);
 
-export {api};
+export { api };

@@ -3,7 +3,7 @@
 import { User, Users } from '../models/user';
 
 function getUsers(req, res, next){
-  /*Users.forge()
+  Users.forge()
   .fetch()
   .then(function(collection){
     res.json({
@@ -17,11 +17,11 @@ function getUsers(req, res, next){
       error: true,
       data: {message: err.message}
     });
-  });*/
+  });
 }
 
 function getUserById(req, res, next){
-  /*User.forge({
+  User.forge({
     id : req.params.id
   })
   .fetch()
@@ -45,11 +45,11 @@ function getUserById(req, res, next){
       error : false,
       data : {message : err.message}
     })
-  })*/
+  })
 }
 
 function saveUser(req, res, next){
-  /*User.forge({
+  User.forge({
     name: req.body.name,
     email: req.body.email
   })
@@ -69,11 +69,11 @@ function saveUser(req, res, next){
       error: true,
       data: {message: err.message}
     });
-  });*/
+  });
 }
 
 function updateUser(req, res, next){
-  /*User.forge({ id : req.params.id })
+  User.forge({ id : req.params.id })
   .fetch({ require : true })
   .then(function(user){
     user.save({
@@ -99,11 +99,11 @@ function updateUser(req, res, next){
       error : true,
       data : {message : err.message}
     })
-  })*/
+  })
 }
 
 function deleteUser(req, res, next){
-  /*User.forge({id : req.params.id})
+  User.forge({id : req.params.id})
   .fetch({require : true})
   .then(function(user){
     user.destroy()
@@ -121,15 +121,7 @@ function deleteUser(req, res, next){
   .catch(function(err){
     res.status(500)
     .json({error : true, data : {message : err.message}})
-  })*/
+  })
 }
-
-/*module.exports = {
-  getUsers,
-  getUserById,
-  saveUser,
-  updateUser,
-  deleteUser
-};*/
 
 export { getUsers, getUserById, saveUser, updateUser, deleteUser };

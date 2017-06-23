@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 // Declare routes to API
 app.use('/api/v1', api);
 
-// Start server 
+// Start server
 app.listen(process.env.PORT, () => {
   console.log(" ✔ Express server listening on port %d in %s mode", process.env.PORT, process.env.NODE_ENV);
 });
