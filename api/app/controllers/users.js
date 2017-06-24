@@ -2,9 +2,10 @@
 
 import { User, Users } from '../models/user';
 
-function getUsers(req, res, next){
+export let getUsers = (req, res, next) => {
   Users.forge()
-  .fetch()
+  .query('where', 'deleted', '=', '0')
+  .fetch({columns: ['id', 'email', 'name']})
   .then(function(collection){
     res.json({
       error : false,
@@ -18,13 +19,14 @@ function getUsers(req, res, next){
       data: {message: err.message}
     });
   });
-}
+};
 
-function getUserById(req, res, next){
+export let getUserById = (req, res, next) => {
   User.forge({
     id : req.params.id
   })
-  .fetch()
+  .query('where', 'deleted', '=', '0')
+  .fetch({columns: ['id', 'email', 'name']})
   .then(function(user){
     if(!user){
       res.status(404)
@@ -46,9 +48,9 @@ function getUserById(req, res, next){
       data : {message : err.message}
     })
   })
-}
+};
 
-function saveUser(req, res, next){
+export let saveUser = (req, res, next) => {
   User.forge({
     name: req.body.name,
     email: req.body.email
@@ -70,9 +72,9 @@ function saveUser(req, res, next){
       data: {message: err.message}
     });
   });
-}
+};
 
-function updateUser(req, res, next){
+export let updateUser = (req, res, next) => {
   User.forge({ id : req.params.id })
   .fetch({ require : true })
   .then(function(user){
@@ -100,9 +102,9 @@ function updateUser(req, res, next){
       data : {message : err.message}
     })
   })
-}
+};
 
-function deleteUser(req, res, next){
+export let deleteUser = (req, res, next) => {
   User.forge({id : req.params.id})
   .fetch({require : true})
   .then(function(user){
@@ -122,6 +124,4 @@ function deleteUser(req, res, next){
     res.status(500)
     .json({error : true, data : {message : err.message}})
   })
-}
-
-export { getUsers, getUserById, saveUser, updateUser, deleteUser };
+};

@@ -11,6 +11,4 @@ const Users = bookshelf.Collection.extend({
 	model : User
 });
 
-export {
-  Users, User
-};
+export { Users, User };
