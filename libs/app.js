@@ -5,11 +5,11 @@ import express from 'express';
 import consign from 'consign';
 
 // Initialize express
-const app = express();
+var app = express();
 
 // Declare consign with path
-consign({cwd: 'api'})
+consign()
   .include('libs/middlewares.js')
-  .then('routes')
+  .then('api/routes')
   .then('libs/boots.js')
   .into(app);

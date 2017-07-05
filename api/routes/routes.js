@@ -1,28 +1,35 @@
 'use strict';
 
 import * as users from '../app/controllers/users';
-//import * as categories from '../app/controllers/users';
-//import * as posts from '../app/controllers/users';
+import * as categories from '../app/controllers/categories';
+import * as posts from '../app/controllers/posts';
+
+import express from 'express';
 
 module.exports = app => {
+  
+  var api = express.Router();              
 
-  app.get("/", (req, res) => res.json({message: "Welcome to our Blog Api!"}));
+  // Declare access route 
+  api.get("/", (req, res) => res.json({message: "Welcome to our Blog Api!"}));
 
-  app.get('/users', users.getUsers);
-  app.post('/users', users.saveUser);
-  app.get('/users/:id', users.getUserById);
-  app.put('/users/:id', users.updateUser);
-  app.delete('/users/:id', users.deleteUser);
+  api.get('/users', users.getUsers);
+  api.post('/users', users.saveUser);
+  api.get('/users/:id', users.getUserById);
+  api.put('/users/:id', users.updateUser);
+  api.delete('/users/:id', users.deleteUser);
 
-  /*app.get('/categories', getCategories);
-  app.post('/categories', saveCategory);
-  app.get('/categories/:id', getCategoryById);
-  app.put('/categories/:id', updateCategory);
-  app.delete('/categories/:id', deleteCategory);
+  api.get('/categories', categories.getCategories);
+  api.post('/categories', categories.saveCategory);
+  api.get('/categories/:id', categories.getCategoryById);
+  api.put('/categories/:id', categories.updateCategory);
+  api.delete('/categories/:id', categories.deleteCategory);
 
-  app.get('/posts', getPost);
-  app.get('/posts/:id', getPostById);
-  app.post('/posts', savePost);
-  app.get('/posts/category/:id', getCategoryById);*/
+  api.get('/posts', posts.getPost);
+  api.get('/posts/:id', posts.getPostById);
+  api.post('/posts', posts.savePost);
+  api.get('/posts/category/:id', posts.getCategoryById);
+  api.get('/posts/tag/:slug', posts.getTagSlug);
 
+  app.use('/api/v1', api);
 }

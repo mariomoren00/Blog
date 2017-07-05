@@ -1,14 +1,24 @@
 'use strict';
 
-import { bookshelf } from '../../config/database';
+import { Bookshelf } from '../../config/database';
+import { Post } from './post';
 
-const User = bookshelf.Model.extend({
+// Declare collection, model and relation to table Users 
+var User = Bookshelf.Model.extend({
   tableName: 'users',
-  hasTimestamps: true
+  hasTimestamps: true,
+  hidden: ['password', 'salt', 'secret', 'hashtype', 'deleted'],
+
+  post () {
+    return this.hasMany(Post);
+  }
+
 });
 
-const Users = bookshelf.Collection.extend({
+User = Bookshelf.model('User', User);
+
+var Users = Bookshelf.Collection.extend({
 	model : User
 });
 
-export { Users, User };
+export { User, Users };

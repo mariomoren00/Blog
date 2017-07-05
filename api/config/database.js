@@ -1,18 +1,21 @@
 'use strict';
 
 // Declare connection to database
-const knex = require('knex')({
+var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host     : '127.0.0.1',
-    user     : 'root',
-    password : 'your_password',
-    database : 'blog',
-    charset  : 'utf8',
-    port : 3306
+    host     : process.env.APP_HOST,
+    user     : process.env.APP_USER,
+    password : process.env.APP_PASSWORD,
+    database : process.env.APP_DATABASE,
+    charset  : process.env.APP_CHARSET,
+    port : process.env.APP_PORT_DB
   }
 });
 
-const bookshelf = require('bookshelf')(knex);
+var Bookshelf = require('bookshelf')(knex);
 
-export { bookshelf };
+Bookshelf.plugin('registry');
+Bookshelf.plugin('visibility');
+
+export { Bookshelf };

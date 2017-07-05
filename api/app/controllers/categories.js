@@ -2,31 +2,30 @@
 
 import { Category, Categories } from '../models/category';
 
-
-function getCategories(req, res){
+export let getCategories = (req, res, next) => {
 	Categories.forge()
-	.fetch()
-	.then(function(collection){
+	.query('where', 'deleted', '=', '0')
+	.fetch({columns: ['id', 'name']})
+	.then((collection) => {
 		res.json({
 			error : false,
 			data : collection.toJSON()
 		})
 	})
-	.catch(function(err){
+	.catch((err) => {
 		res.status(500)
 		.json({
 			error : true,
 			data : { message : err.message }
 		})
 	})
-}
+};
 
-function getCategoryById(req, res){
-	Category.forge({
-		id : req.params.id
-	})
+export let getCategoryById = (req, res, next) => {
+	Category.forge({ id : req.params.id})
+	.query('where', 'deleted', '=', '0')
 	.fetch()
-	.then(function(category){
+	.then((category) => {
 		if(!category){
 			res.status(404)
 			.json({
@@ -40,80 +39,79 @@ function getCategoryById(req, res){
 			})
 		}
 	})
-	.catch(function(err){
+	.catch((err) => {
 		res.status(500)
 		.json({
 			error : false,
 			data : { message : err.message }
 		})
 	})
-}
+};
 
-function saveCategory(req, res){
-	Category.forge({
-		name : req.body.name
-	})
+export let saveCategory = (req, res, next) => {
+	Category.forge({name : req.body.name})
 	.save()
-	.then(function(category){
+	.then((category) => {
 		res.json({
 			error : false,
-			data : { id : category.get('id') }
+			data : {
+				id : category.get('id')
+			}
 		})
 	})
-	.catch(function(err){
+	.catch((err) => {
 		res.status(500)
 		.json({
 			error : true,
 			data : {message : err.message}
 		})
 	})
-}
+};
 
-function updateCategory(req, res){
-	Category.forge({
-		id : req.params.id
-	})
-	.fetch({
-		require : true
-	})
-	.then(function(category){
+export let updateCategory = (req, res, next) => {
+	Category.forge({ id : req.params.id })
+	.fetch({ require : true })
+	.then((category) => {
 		category.save({
 			name : req.body.name || category.get('name')
 		})
-		.then(function(){
+		.then(() => {
 			res.json({
 				error : false,
-				data : {message : "category update"}
+				data : {message : "Category update"}
 			})
 		})
-		.catch(function(err){
+		.catch((err)=> {
 			res.json({
 				error : true,
 				data : {message : err.message}
 			})
 		})
 	})
-	.catch(function(err){
+	.catch((err) => {
 		res.status(500)
 		.json({
 			error : true,
 			data : {message : err.message}
 		})
 	})
-}
+};
 
-function deleteCategory(req, res){
+export let deleteCategory = (req, res, next) => {
 	Category.forge({ id : req.params.id })
 	.fetch({ require : true })
-	.then(function(category){
-		category.destroy()
-		.then(function(){
+	.then((category) => {
+		//category.destroy()
+		category.save({
+			deleted : 1
+		})
+		.then(() => {
 			res.json({
 				error : false,
 				data : { message : 'Category deleted'}
 			})
 		})
-		.catch(function(err){
+		.catch((err) => {
 			res.status(500)
 			.json({
 				error : true,
@@ -121,13 +119,11 @@ function deleteCategory(req, res){
 			})
 		})
 	})
-	.catch(function(err){
+	.catch((err) => {
 		res.status(500)
 		.json({
 			error : true,
 			data : { message : err.message }
 		})
 	})
-}
-
-export = { getCategories, getCategoryById, saveCategory, updateCategory, deleteCategory }
+};

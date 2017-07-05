@@ -5,14 +5,14 @@ import { User, Users } from '../models/user';
 export let getUsers = (req, res, next) => {
   Users.forge()
   .query('where', 'deleted', '=', '0')
-  .fetch({columns: ['id', 'email', 'name']})
-  .then(function(collection){
+  .fetch()
+  .then((collection) => {
     res.json({
       error : false,
       data : collection.toJSON()
     });
   })
-  .catch(function (err) {
+  .catch((err) => {
       res.status(500)
     .json({
       error: true,
@@ -26,8 +26,8 @@ export let getUserById = (req, res, next) => {
     id : req.params.id
   })
   .query('where', 'deleted', '=', '0')
-  .fetch({columns: ['id', 'email', 'name']})
-  .then(function(user){
+  .fetch()
+  .then((user) => {
     if(!user){
       res.status(404)
       .json({
@@ -41,7 +41,7 @@ export let getUserById = (req, res, next) => {
       })
     }
   })
-  .catch(function(err){
+  .catch((err) => {
     res.status(500)
     .json({
       error : false,
@@ -52,20 +52,23 @@ export let getUserById = (req, res, next) => {
 
 export let saveUser = (req, res, next) => {
   User.forge({
-    name: req.body.name,
-    email: req.body.email
+    name : req.body.name,
+    email : req.body.email,
+    password : req.body.password
   })
   .save()
-  .then(function(user){
+  .then((user) => {
     res.json({
       error: false,
       data: {
         id : user.get('id'),
-        name : user.get('name')
-      }
+        name : user.get('name'),
+        email : user.get('email')
+      },
+      message : 'User deatils create'
     });
   })
-  .catch(function (err) {
+  .catch((err) => {
     res.status(500)
     .json({
       error: true,
@@ -77,25 +80,30 @@ export let saveUser = (req, res, next) => {
 export let updateUser = (req, res, next) => {
   User.forge({ id : req.params.id })
   .fetch({ require : true })
-  .then(function(user){
+  .then((user) => {
     user.save({
       name : req.body.name || user.get('name'),
       email : req.body.name || user.get('name')
     })
-    .then(function(){
+    .then(() => {
       res.json({
         error : false,
-        data : { message : 'User deatils update'}
+        data : {
+          id : user.get('id'),
+          name : user.get('name'),
+          email : user.get('email')
+        },
+        message : 'User deatils update'
       });
     })
-    .catch(function(err){
+    .catch((err) => {
       res.json({
         error : true,
         data : { message : err.message }
       })
     })
   })
-  .catch(function(err){
+  .catch((err) => {
     res.status(500)
     .json({
       error : true,
@@ -107,20 +115,28 @@ export let updateUser = (req, res, next) => {
 export let deleteUser = (req, res, next) => {
   User.forge({id : req.params.id})
   .fetch({require : true})
-  .then(function(user){
-    user.destroy()
-    .then(function(){
+  .then((user) => {
+    //user.destroy()
+    user.save({
+			deleted : 1
+		})
+    .then(() => {
       res.json({
         error : false,
-        data : {message : 'User successfully deleted'}
+        data : {
+          id : user.get('id'),
+          name : user.get('name'),
+          email : user.get('email')
+        },
+        message : 'User successfully deleted'
       })
     })
-    .catch(function(err){
+    .catch((err) => {
       res.status(500)
       .json({error : true, data : {message : err.message}})
     })
   })
-  .catch(function(err){
+  .catch((err) => {
     res.status(500)
     .json({error : true, data : {message : err.message}})
   })
