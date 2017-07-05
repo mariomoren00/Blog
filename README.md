@@ -27,3 +27,14 @@ Next we need to define our API end points - we need to be able to perform basic 
  - `PUT    /post/:id` - update post
  - `DELETE /post/:id` - delete post
  - `GET    /posts/category/:id` - fetch all posts from a single category
+
+### Tools
+- Express
+- Body parser
+- Bookshelf
+- Consign
+- Dotenv
+- Knex
+- Lodash
+- Mysql
+- Babel
