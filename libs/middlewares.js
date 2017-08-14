@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+import logger from 'morgan';
 import bodyParser from 'body-parser';
 
 module.exports = app => {
@@ -15,6 +16,9 @@ module.exports = app => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     next();
   });
+
+  //Request logger middleware 
+  app.use(logger('dev'));
 
   // Parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({extended : true}));
