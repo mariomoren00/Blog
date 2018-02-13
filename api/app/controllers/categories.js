@@ -9,7 +9,7 @@ export let getCategories = (req, res, next) => {
 	.then((collection) => {
 		res.json({
 			error : false,
-			data : collection.toJSON()
+			data : collection
 		})
 	})
 	.catch((err) => {
@@ -55,7 +55,8 @@ export let saveCategory = (req, res, next) => {
 		res.json({
 			error : false,
 			data : {
-				id : category.get('id')
+				id : category.get('id'),
+				name: category.get('name')
 			}
 		})
 	})
